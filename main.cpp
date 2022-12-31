@@ -29,7 +29,10 @@ void transactionhistory();
 void editbalance();
 void writedatafile();
 void exit();
-
+void exportmenu();
+void csvexport();
+void jsonexport();
+void xlsxexport();
 
 int main(){
     initialize();
@@ -39,7 +42,7 @@ int main(){
 void menu(){
     system("cls");
     cout << "Current Balance:  Rs. " << balance <<endl << endl << endl;
-    cout << "1. Add Debit Record\n2. Add Credit Record\n3. View Transaction History\n4. Edit Balance\n\n0.Exit\n\n\nPlease Enter your option number!\n";
+    cout << "1. Add Debit Record\n2. Add Credit Record\n3. View Transaction History\n4. Edit Balance\n5. Export\n\n0.Exit\n\n\nPlease Enter your option number!\n";
     int menuinput;
     cin >> menuinput;
 
@@ -55,6 +58,9 @@ void menu(){
         break;
         case 4:
         editbalance();
+        break;
+        case 5:
+        exportmenu();
         break;
         case 0:
         exit();
@@ -223,3 +229,124 @@ void editbalance(){
 };
 
 void exit(){};
+
+void exportmenu(){
+    system("cls");
+    cout << "Please choose the export format: \n\n1.CSV\n2.JSON\n3.Excel format(.xlsx)  [To use this, Microsoft Excel 2007 or later must be installed]\n\n0.Back to Main Menu" << endl << endl << endl;
+    int exportmenuinput;
+    cin >> exportmenuinput;
+
+    switch(exportmenuinput){
+        case 1: 
+        csvexport();
+        break;
+        case 2:
+        jsonexport();
+        break;
+        case 3:
+        xlsxexport();
+        break;
+        case 0:
+        menu();
+        break;
+        default:
+        system("cls");
+        cout << "Please choose a valid option!\n\n\n";
+        system("pause");
+        exportmenu();
+        break;
+        }
+
+}
+
+void csvexport(){
+    chdir(path.c_str());
+    system("type nul > export.csv");
+    ofstream data("export.csv", ios::trunc);
+    data << "Transaction Type, Transaction Date, Amount, Notes" <<endl;
+    int counter = 0;
+    while((counter) < entrynum){
+
+        if((entries[counter].type)==0){
+            data << "Debit, ";
+        }else if((entries[counter].type)==1){
+            data << "Credit, ";
+        }else if((entries[counter].type)==2){
+            data << "Balance Adjust, ";
+        }
+
+        data << entries[counter].date << ", ";
+        data << entries[counter].amount << ", ";
+        data << entries[counter].note <<endl;
+        counter++;
+    }
+    data.close();
+    system("cls");
+    cout << "CSV Exported Successfully!\n\n\n\n\n";
+    system("pause");
+    menu();
+}
+
+void jsonexport(){
+    chdir(path.c_str());
+    system("type nul > export.json");
+    ofstream data("export.json", ios::trunc);
+    data << "[" <<endl;
+    int counter = 0;
+    while((counter) < entrynum){
+            data << "{" <<endl;
+        if((entries[counter].type)==0){
+            data << "\"Transaction Type\": \"Debit\"," <<endl;
+        }else if((entries[counter].type)==1){
+            data << "\"Transaction Type\": \"Credit\","<<endl;
+        }else if((entries[counter].type)==2){
+            data << "\"Transaction Type\": \"Balance Adjust\","<<endl;
+        }
+
+        data << "\"Transaction Date\": \"" << entries[counter].date << "\"," <<endl;
+        data << "\"Amount\": " <<entries[counter].amount << "," <<endl;
+
+        if(counter == entrynum-1){
+            data << "\"Notes\": \"" <<entries[counter].note <<"\""<<endl << "}"<< endl;
+        }else{
+            data << "\"Notes\": \"" <<entries[counter].note <<"\""<<endl << "},"<< endl;
+        }
+        counter++;
+    }
+        data << "]";
+    data.close();
+    system("cls");
+    cout << "JSON Exported Successfully!\n\n\n\n\n";
+    system("pause");
+    menu();
+}
+
+void xlsxexport(){
+        chdir(path.c_str());
+    system("type nul > export.csv");
+    ofstream data("export.csv", ios::trunc);
+    data << "Transaction Type, Transaction Date, Amount, Notes" <<endl;
+    int counter = 0;
+    while((counter) < entrynum){
+
+        if((entries[counter].type)==0){
+            data << "Debit, ";
+        }else if((entries[counter].type)==1){
+            data << "Credit, ";
+        }else if((entries[counter].type)==2){
+            data << "Balance Adjust, ";
+        }
+
+        data << entries[counter].date << ", ";
+        data << entries[counter].amount << ", ";
+        data << entries[counter].note <<endl;
+        counter++;
+    }
+    data.close();
+    system("Excel /e /a \"export.csv\" \"export.xlsx\" ");
+    system("pause");
+    system("cls");
+    cout << "XLSX Exported Successfully!\n\n\n\n\n";
+    system("pause");
+    menu();
+}
