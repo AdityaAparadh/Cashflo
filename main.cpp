@@ -30,6 +30,7 @@ void editbalance();
 void writedatafile();
 void exit();
 
+
 int main(){
     initialize();
     return 0;
@@ -131,6 +132,7 @@ void adddebit(){
     string debitnote;
     cout << "Please Enter the Amount to Debit:\n";
     cin >> debitamount;
+    cin.ignore(); 
     cout << "Please Enter the Note: \n";
     getline(cin, debitnote);
     string date = get_current_date();
@@ -154,6 +156,7 @@ void addcredit(){
     string creditnote;
     cout << "Please Enter the Amount to Credit:\n";
     cin >> creditamount;
+    cin.ignore(); 
     cout << "Please Enter the Note: \n";
     getline(cin, creditnote);
     string date = get_current_date();
@@ -202,6 +205,7 @@ void editbalance(){
         cout<< "\n\n\nDifference in Balance is: " << difference;
         string date = get_current_date();
         string editnote;
+        cin.ignore();
         cout << "\n\nEnter the note: " << endl;
         getline(cin,editnote);
         entry editentry;
