@@ -8,8 +8,8 @@
 #include <iomanip>
 using namespace std;
 
-
-struct entry{
+struct entry
+{
     string date;
     float amount;
     int type;
@@ -32,50 +32,54 @@ void exit();
 void exportmenu();
 void csvexport();
 void jsonexport();
-void xlsxexport();
 
-int main(){
+int main()
+{
     initialize();
     return 0;
 }
 
-void menu(){
+void menu()
+{
     system("cls");
-    cout << "Current Balance:  Rs. " << balance <<endl << endl << endl;
+    cout << "Current Balance:  Rs. " << balance << endl
+         << endl
+         << endl;
     cout << "1. Add Debit Record\n2. Add Credit Record\n3. View Transaction History\n4. Edit Balance\n5. Export\n\n0.Exit\n\n\nPlease Enter your option number!\n";
     int menuinput;
     cin >> menuinput;
 
-    switch(menuinput){
-        case 1: 
+    switch (menuinput)
+    {
+    case 1:
         adddebit();
         break;
-        case 2:
+    case 2:
         addcredit();
         break;
-        case 3:
+    case 3:
         transactionhistory();
         break;
-        case 4:
+    case 4:
         editbalance();
         break;
-        case 5:
+    case 5:
         exportmenu();
         break;
-        case 0:
+    case 0:
         exit();
         break;
-        default:
+    default:
         system("cls");
         cout << "Please choose a valid option!\n\n\n";
         system("pause");
         menu();
         break;
-        }
-
+    }
 }
 
-void initialize(){
+void initialize()
+{
     chdir(path.c_str());
     fstream data("data.txt");
     string entriesstring1, entriesstring2;
@@ -90,23 +94,25 @@ void initialize(){
     int counter = 0;
     string temp;
     getline(data, temp);
-    while (counter < entrynum){
-        string temp1 = "0", temp2="0";
+    while (counter < entrynum)
+    {
+        string temp1 = "0", temp2 = "0";
         getline(data, entries[counter].date);
         getline(data, temp1);
         getline(data, temp2);
         getline(data, entries[counter].note);
-        entries[counter].amount = stoi(temp1);
-        entries[counter].type;
-            string temp;
-            getline(data, temp);
+        entries[counter].amount = stof(temp1);
+        entries[counter].type = stoi(temp2);
+        string temp;
+        getline(data, temp);
         counter++;
-}
-data.close();
-menu();
+    }
+    data.close();
+    menu();
 }
 
-string get_current_date() {
+string get_current_date()
+{
     auto now = chrono::system_clock::now();
     time_t t = chrono::system_clock::to_time_t(now);
     tm *tm = localtime(&t);
@@ -115,30 +121,34 @@ string get_current_date() {
     return ss.str();
 }
 
-void writedatafile(){
+void writedatafile()
+{
     chdir(path.c_str());
     ofstream data("data.txt", ios::trunc);
-    data << balance <<endl;
+    data << balance << endl;
     data << entrynum << endl;
     data << endl;
     int counter = 0;
-    while((counter) < entrynum){
+    while ((counter) < entrynum)
+    {
         data << entries[counter].date << endl;
         data << entries[counter].amount << endl;
         data << entries[counter].type << endl;
-        data << entries[counter].note << endl <<endl;
+        data << entries[counter].note << endl
+             << endl;
         counter++;
     }
     data.close();
 }
 
-void adddebit(){
+void adddebit()
+{
     system("cls");
     float debitamount;
     string debitnote;
     cout << "Please Enter the Amount to Debit:\n";
     cin >> debitamount;
-    cin.ignore(); 
+    cin.ignore();
     cout << "Please Enter the Note: \n";
     getline(cin, debitnote);
     string date = get_current_date();
@@ -156,13 +166,14 @@ void adddebit(){
     writedatafile();
     menu();
 }
-void addcredit(){
+void addcredit()
+{
     system("cls");
     float creditamount;
     string creditnote;
     cout << "Please Enter the Amount to Credit:\n";
     cin >> creditamount;
-    cin.ignore(); 
+    cin.ignore();
     cout << "Please Enter the Note: \n";
     getline(cin, creditnote);
     string date = get_current_date();
@@ -180,104 +191,121 @@ void addcredit(){
     writedatafile();
     menu();
 };
-void transactionhistory(){
+void transactionhistory()
+{
     system("cls");
     cout << " TRANSACTION HISTORY\n\n\n";
 
     int counter = 0;
-    while(counter<entrynum){
-        if(entries[counter].type == 0){
+    while (counter < entrynum)
+    {
+        if (entries[counter].type == 0)
+        {
             cout << "Transaction Type: Debit" << endl;
-        }else if(entries[counter].type == 1){
+        }
+        else if (entries[counter].type == 1)
+        {
             cout << "Transaction Type: Credit" << endl;
-        }else if(entries[counter].type == 2){
+        }
+        else if (entries[counter].type == 2)
+        {
             cout << "Balance Adjust" << endl;
         }
-        cout<< "Date: " << entries[counter].date << endl;
+        cout << "Date: " << entries[counter].date << endl;
         cout << "Amount: Rs. " << entries[counter].amount << endl;
-        cout << entries[counter].note << endl <<endl<<endl;
+        cout << entries[counter].note << endl
+             << endl
+             << endl;
         counter++;
     }
     system("pause");
     menu();
 };
-void editbalance(){
-        system("cls");
-        cout << "Old Balance: Rs. " << balance;
-        cout << "\n\n\nPlease enter the new Balance"<< endl;
-        float newbalance,difference;
-        cin >> newbalance;
-        difference = newbalance - balance;
-        cout<< "\n\n\nDifference in Balance is: " << difference;
-        string date = get_current_date();
-        string editnote;
-        cin.ignore();
-        cout << "\n\nEnter the note: " << endl;
-        getline(cin,editnote);
-        entry editentry;
-        editentry.amount = difference;
-        editentry.note = editnote;
-        editentry.type = 2;
-        editentry.date = date;
+void editbalance()
+{
+    system("cls");
+    cout << "Old Balance: Rs. " << balance;
+    cout << "\n\n\nPlease enter the new Balance" << endl;
+    float newbalance, difference;
+    cin >> newbalance;
+    difference = newbalance - balance;
+    cout << "\n\n\nDifference in Balance is: " << difference;
+    string date = get_current_date();
+    string editnote;
+    cin.ignore();
+    cout << "\n\nEnter the note: " << endl;
+    getline(cin, editnote);
+    entry editentry;
+    editentry.amount = difference;
+    editentry.note = editnote;
+    editentry.type = 2;
+    editentry.date = date;
 
-        entries.push_back(editentry);
+    entries.push_back(editentry);
 
-        balance = newbalance;
-        entrynum++;
-        writedatafile();
-        menu();
+    balance = newbalance;
+    entrynum++;
+    writedatafile();
+    menu();
 };
 
 void exit(){};
 
-void exportmenu(){
+void exportmenu()
+{
     system("cls");
-    cout << "Please choose the export format: \n\n1.CSV\n2.JSON\n3.Excel format(.xlsx)  [To use this, Microsoft Excel 2007 or later must be installed]\n\n0.Back to Main Menu" << endl << endl << endl;
+    cout << "Please choose the export format: \n\n1.CSV\n2.JSON\n\n0.Back to Main Menu" << endl
+         << endl
+         << endl;
     int exportmenuinput;
     cin >> exportmenuinput;
 
-    switch(exportmenuinput){
-        case 1: 
+    switch (exportmenuinput)
+    {
+    case 1:
         csvexport();
         break;
-        case 2:
+    case 2:
         jsonexport();
         break;
-        case 3:
-        xlsxexport();
-        break;
-        case 0:
+    case 0:
         menu();
         break;
-        default:
+    default:
         system("cls");
         cout << "Please choose a valid option!\n\n\n";
         system("pause");
         exportmenu();
         break;
-        }
-
+    }
 }
 
-void csvexport(){
+void csvexport()
+{
     chdir(path.c_str());
     system("type nul > export.csv");
     ofstream data("export.csv", ios::trunc);
-    data << "Transaction Type, Transaction Date, Amount, Notes" <<endl;
+    data << "Transaction Type, Transaction Date, Amount, Notes" << endl;
     int counter = 0;
-    while((counter) < entrynum){
+    while ((counter) < entrynum)
+    {
 
-        if((entries[counter].type)==0){
+        if ((entries[counter].type) == 0)
+        {
             data << "Debit, ";
-        }else if((entries[counter].type)==1){
+        }
+        else if ((entries[counter].type) == 1)
+        {
             data << "Credit, ";
-        }else if((entries[counter].type)==2){
+        }
+        else if ((entries[counter].type) == 2)
+        {
             data << "Balance Adjust, ";
         }
 
         data << entries[counter].date << ", ";
         data << entries[counter].amount << ", ";
-        data << entries[counter].note <<endl;
+        data << entries[counter].note << endl;
         counter++;
     }
     data.close();
@@ -287,33 +315,45 @@ void csvexport(){
     menu();
 }
 
-void jsonexport(){
+void jsonexport()
+{
     chdir(path.c_str());
     system("type nul > export.json");
     ofstream data("export.json", ios::trunc);
-    data << "[" <<endl;
+    data << "[" << endl;
     int counter = 0;
-    while((counter) < entrynum){
-            data << "{" <<endl;
-        if((entries[counter].type)==0){
-            data << "\"Transaction Type\": \"Debit\"," <<endl;
-        }else if((entries[counter].type)==1){
-            data << "\"Transaction Type\": \"Credit\","<<endl;
-        }else if((entries[counter].type)==2){
-            data << "\"Transaction Type\": \"Balance Adjust\","<<endl;
+    while ((counter) < entrynum)
+    {
+        data << "{" << endl;
+        if ((entries[counter].type) == 0)
+        {
+            data << "\"Transaction Type\": \"Debit\"," << endl;
+        }
+        else if ((entries[counter].type) == 1)
+        {
+            data << "\"Transaction Type\": \"Credit\"," << endl;
+        }
+        else if ((entries[counter].type) == 2)
+        {
+            data << "\"Transaction Type\": \"Balance Adjust\"," << endl;
         }
 
-        data << "\"Transaction Date\": \"" << entries[counter].date << "\"," <<endl;
-        data << "\"Amount\": " <<entries[counter].amount << "," <<endl;
+        data << "\"Transaction Date\": \"" << entries[counter].date << "\"," << endl;
+        data << "\"Amount\": " << entries[counter].amount << "," << endl;
 
-        if(counter == entrynum-1){
-            data << "\"Notes\": \"" <<entries[counter].note <<"\""<<endl << "}"<< endl;
-        }else{
-            data << "\"Notes\": \"" <<entries[counter].note <<"\""<<endl << "},"<< endl;
+        if (counter == entrynum - 1)
+        {
+            data << "\"Notes\": \"" << entries[counter].note << "\"" << endl
+                 << "}" << endl;
+        }
+        else
+        {
+            data << "\"Notes\": \"" << entries[counter].note << "\"" << endl
+                 << "}," << endl;
         }
         counter++;
     }
-        data << "]";
+    data << "]";
     data.close();
     system("cls");
     cout << "JSON Exported Successfully!\n\n\n\n\n";
@@ -321,25 +361,32 @@ void jsonexport(){
     menu();
 }
 
-void xlsxexport(){
-        chdir(path.c_str());
+void xlsxexport()
+{
+    chdir(path.c_str());
     system("type nul > export.csv");
     ofstream data("export.csv", ios::trunc);
-    data << "Transaction Type, Transaction Date, Amount, Notes" <<endl;
+    data << "Transaction Type, Transaction Date, Amount, Notes" << endl;
     int counter = 0;
-    while((counter) < entrynum){
+    while ((counter) < entrynum)
+    {
 
-        if((entries[counter].type)==0){
+        if ((entries[counter].type) == 0)
+        {
             data << "Debit, ";
-        }else if((entries[counter].type)==1){
+        }
+        else if ((entries[counter].type) == 1)
+        {
             data << "Credit, ";
-        }else if((entries[counter].type)==2){
+        }
+        else if ((entries[counter].type) == 2)
+        {
             data << "Balance Adjust, ";
         }
 
         data << entries[counter].date << ", ";
         data << entries[counter].amount << ", ";
-        data << entries[counter].note <<endl;
+        data << entries[counter].note << endl;
         counter++;
     }
     data.close();
