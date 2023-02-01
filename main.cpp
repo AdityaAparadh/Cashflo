@@ -1,3 +1,6 @@
+// Version 0.1 - alpha
+
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -18,7 +21,6 @@ struct entry
 vector<entry> entries;
 float balance;
 int entrynum;
-string path = "C:\\Users\\Aditya\\Desktop\\Programming\\Cashflo";
 
 string get_current_date();
 void initialize();
@@ -80,7 +82,6 @@ void menu()
 
 void initialize()
 {
-    chdir(path.c_str());
     fstream data("data.txt");
     string entriesstring1, entriesstring2;
 
@@ -89,8 +90,6 @@ void initialize()
     getline(data, entriesstring2);
     entrynum = stoi(entriesstring2);
     entries.resize(entrynum);
-    // cout << "Balance is: " << balance << "Entrynum is : " << entrynum << endl;
-    // system("pause");
     int counter = 0;
     string temp;
     getline(data, temp);
@@ -123,7 +122,6 @@ string get_current_date()
 
 void writedatafile()
 {
-    chdir(path.c_str());
     ofstream data("data.txt", ios::trunc);
     data << balance << endl;
     data << entrynum << endl;
@@ -282,7 +280,6 @@ void exportmenu()
 
 void csvexport()
 {
-    chdir(path.c_str());
     system("type nul > export.csv");
     ofstream data("export.csv", ios::trunc);
     data << "Transaction Type, Transaction Date, Amount, Notes" << endl;
@@ -317,7 +314,6 @@ void csvexport()
 
 void jsonexport()
 {
-    chdir(path.c_str());
     system("type nul > export.json");
     ofstream data("export.json", ios::trunc);
     data << "[" << endl;
@@ -363,7 +359,6 @@ void jsonexport()
 
 void xlsxexport()
 {
-    chdir(path.c_str());
     system("type nul > export.csv");
     ofstream data("export.csv", ios::trunc);
     data << "Transaction Type, Transaction Date, Amount, Notes" << endl;
