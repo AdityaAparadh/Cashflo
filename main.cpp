@@ -70,10 +70,16 @@ int main()
 void menu()
 {
     system("cls");
+    cout << "##################################" << endl;
+    cout << "##                              ##" << endl;
+    cout << "##         CASHFLO CLI          ##"<< endl;
+    cout << "##          v0.1 - alpha        ##"<< endl;
+    cout << "##                              ##"<< endl;
+    cout << "##################################"<< endl<< endl<< endl;
     cout << "Current Balance:  Rs. " << balance << endl
          << endl
          << endl;
-    cout << "1. Add Debit Record\n2. Add Credit Record\n3. View Transaction History\n4. Edit Balance\n5. Export\n\n0.Exit\n\n\nPlease Enter your option number!\n";
+    cout << "1. Add Debit Record\n2. Add Credit Record\n3. View Transaction History\n4. Edit Balance\n5. Export\n\n0.Exit\n\n\nPlease Enter your option number:\n";
     int menuinput;
 
     cin >> menuinput;
