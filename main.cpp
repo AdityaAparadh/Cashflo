@@ -1,5 +1,30 @@
-// Version 0.1 - alpha
-
+// #########################################################################################
+// ##                                                                                     ##
+// ##                                 Version 0.1 - alpha                                 ##
+// ##                                                                                     ##
+// #########################################################################################
+// ##    MIT License                                                                      ##
+// ##                                                                                     ##
+// ##    Copyright (c) 2023 Aditya Aparadh                                                ##
+// ##                                                                                     ##
+// ##    Permission is hereby granted, free of charge, to any person obtaining a copy     ##
+// ##    of this software and associated documentation files (the "Software"), to deal    ##
+// ##    in the Software without restriction, including without limitation the rights     ##
+// ##    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell        ##
+// ##    copies of the Software, and to permit persons to whom the Software is            ##
+// ##    furnished to do so, subject to the following conditions:                         ##
+// ##                                                                                     ##
+// ##    The above copyright notice and this permission notice shall be included in all   ##
+// ##    copies or substantial portions of the Software.                                  ##
+// ##                                                                                     ##
+// ##    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR       ##
+// ##    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,         ##
+// ##    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE      ##
+// ##    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER           ##
+// ##    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,    ##
+// ##    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE    ##
+// ##    SOFTWARE.                                                                        ##
+// #########################################################################################
 
 #include <iostream>
 #include <vector>
@@ -9,6 +34,7 @@
 #include <chrono>
 #include <ctime>
 #include <iomanip>
+#include <sstream>
 using namespace std;
 
 struct entry
@@ -49,6 +75,7 @@ void menu()
          << endl;
     cout << "1. Add Debit Record\n2. Add Credit Record\n3. View Transaction History\n4. Edit Balance\n5. Export\n\n0.Exit\n\n\nPlease Enter your option number!\n";
     int menuinput;
+
     cin >> menuinput;
 
     switch (menuinput)
@@ -109,7 +136,6 @@ void initialize()
     data.close();
     menu();
 }
-
 string get_current_date()
 {
     auto now = chrono::system_clock::now();
@@ -119,7 +145,6 @@ string get_current_date()
     ss << put_time(tm, "%d-%m-%Y");
     return ss.str();
 }
-
 void writedatafile()
 {
     ofstream data("data.txt", ios::trunc);
@@ -138,57 +163,90 @@ void writedatafile()
     }
     data.close();
 }
-
 void adddebit()
 {
     system("cls");
     float debitamount;
     string debitnote;
+    cout << "Entered Fast Entry mode" << endl
+         << "[0 to go back to menu]" << endl
+         << endl;
     cout << "Please Enter the Amount to Debit:\n";
     cin >> debitamount;
-    cin.ignore();
-    cout << "Please Enter the Note: \n";
-    getline(cin, debitnote);
-    string date = get_current_date();
+    if (debitamount == 0)
+    {
+        menu();
+    }
+    else
+    {
+        cin.ignore();
+        cout << "Please Enter the Note: \n";
+        getline(cin, debitnote);
+        if (debitnote == "0")
+        {
+            menu();
+        }
+        else
+        {
+            string date = get_current_date();
 
-    entry debitentry;
-    debitentry.amount = debitamount;
-    debitentry.note = debitnote;
-    debitentry.type = 0;
-    debitentry.date = date;
+            entry debitentry;
+            debitentry.amount = debitamount;
+            debitentry.note = debitnote;
+            debitentry.type = 0;
+            debitentry.date = date;
 
-    entries.push_back(debitentry);
+            entries.push_back(debitentry);
 
-    balance -= debitamount;
-    entrynum++;
-    writedatafile();
-    menu();
+            balance -= debitamount;
+            entrynum++;
+            writedatafile();
+            adddebit();
+        }
+    }
 }
 void addcredit()
 {
     system("cls");
     float creditamount;
     string creditnote;
+    cout << "Entered Fast Entry mode" << endl
+         << "[0 to go back to menu]" << endl
+         << endl;
     cout << "Please Enter the Amount to Credit:\n";
     cin >> creditamount;
-    cin.ignore();
-    cout << "Please Enter the Note: \n";
-    getline(cin, creditnote);
-    string date = get_current_date();
+    if (creditamount == 0)
+    {
+        menu();
+    }
+    else
+    {
+        cin.ignore();
+        cout << "Please Enter the Note: \n";
+        getline(cin, creditnote);
+        if (creditnote == "0")
+        {
+            menu();
+        }
+        else
+        {
+            string date = get_current_date();
 
-    entry debitentry;
-    debitentry.amount = creditamount;
-    debitentry.note = creditnote;
-    debitentry.type = 1;
-    debitentry.date = date;
+            entry debitentry;
+            debitentry.amount = creditamount;
+            debitentry.note = creditnote;
+            debitentry.type = 1;
+            debitentry.date = date;
 
-    entries.push_back(debitentry);
+            entries.push_back(debitentry);
 
-    balance += creditamount;
-    entrynum++;
-    writedatafile();
-    menu();
-};
+            balance += creditamount;
+            entrynum++;
+            writedatafile();
+            addcredit();
+        }
+    }
+}
 void transactionhistory()
 {
     system("cls");
@@ -246,9 +304,10 @@ void editbalance()
     writedatafile();
     menu();
 };
-
-void exit(){};
-
+void exit()
+{
+    system("cls");
+}
 void exportmenu()
 {
     system("cls");
@@ -277,7 +336,6 @@ void exportmenu()
         break;
     }
 }
-
 void csvexport()
 {
     system("type nul > export.csv");
@@ -311,7 +369,6 @@ void csvexport()
     system("pause");
     menu();
 }
-
 void jsonexport()
 {
     system("type nul > export.json");
@@ -356,7 +413,6 @@ void jsonexport()
     system("pause");
     menu();
 }
-
 void xlsxexport()
 {
     system("type nul > export.csv");
