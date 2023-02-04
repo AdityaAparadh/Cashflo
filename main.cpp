@@ -35,6 +35,7 @@
 #include <ctime>
 #include <iomanip>
 #include <sstream>
+#define WINDOWS
 using namespace std;
 
 struct entry
