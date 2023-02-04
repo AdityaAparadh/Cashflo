@@ -60,6 +60,7 @@ void exit();
 void exportmenu();
 void csvexport();
 void jsonexport();
+void clearscreen();
 
 int main()
 {
@@ -69,13 +70,15 @@ int main()
 
 void menu()
 {
-    system("cls");
+    clearscreen();
     cout << "##################################" << endl;
     cout << "##                              ##" << endl;
-    cout << "##         CASHFLO CLI          ##"<< endl;
-    cout << "##          v0.1 - alpha        ##"<< endl;
-    cout << "##                              ##"<< endl;
-    cout << "##################################"<< endl<< endl<< endl;
+    cout << "##         CASHFLO CLI          ##" << endl;
+    cout << "##          v0.1 - alpha        ##" << endl;
+    cout << "##                              ##" << endl;
+    cout << "##################################" << endl
+         << endl
+         << endl;
     cout << "Current Balance:  Rs. " << balance << endl
          << endl
          << endl;
@@ -105,7 +108,7 @@ void menu()
         exit();
         break;
     default:
-        system("cls");
+        clearscreen();
         cout << "Please choose a valid option!\n\n\n";
         system("pause");
         menu();
@@ -171,7 +174,7 @@ void writedatafile()
 }
 void adddebit()
 {
-    system("cls");
+    clearscreen();
     float debitamount;
     string debitnote;
     cout << "Entered Fast Entry mode" << endl
@@ -213,7 +216,7 @@ void adddebit()
 }
 void addcredit()
 {
-    system("cls");
+    clearscreen();
     float creditamount;
     string creditnote;
     cout << "Entered Fast Entry mode" << endl
@@ -255,9 +258,8 @@ void addcredit()
 }
 void transactionhistory()
 {
-    system("cls");
+    clearscreen();
     cout << " TRANSACTION HISTORY\n\n\n";
-
     int counter = 0;
     while (counter < entrynum)
     {
@@ -280,12 +282,15 @@ void transactionhistory()
              << endl;
         counter++;
     }
-    system("pause");
+    int returntomenu;
+    cout << "\n\n[0 to go back]:";
+    cin >> returntomenu;
     menu();
+
 };
 void editbalance()
 {
-    system("cls");
+    clearscreen();
     cout << "Old Balance: Rs. " << balance;
     cout << "\n\n\nPlease enter the new Balance" << endl;
     float newbalance, difference;
@@ -312,11 +317,11 @@ void editbalance()
 };
 void exit()
 {
-    system("cls");
+    clearscreen();
 }
 void exportmenu()
 {
-    system("cls");
+    clearscreen();
     cout << "Please choose the export format: \n\n1.CSV\n2.JSON\n\n0.Back to Main Menu" << endl
          << endl
          << endl;
@@ -335,7 +340,7 @@ void exportmenu()
         menu();
         break;
     default:
-        system("cls");
+        clearscreen();
         cout << "Please choose a valid option!\n\n\n";
         system("pause");
         exportmenu();
@@ -370,7 +375,7 @@ void csvexport()
         counter++;
     }
     data.close();
-    system("cls");
+    clearscreen();
     cout << "CSV Exported Successfully!\n\n\n\n\n";
     system("pause");
     menu();
@@ -414,7 +419,7 @@ void jsonexport()
     }
     data << "]";
     data.close();
-    system("cls");
+    clearscreen();
     cout << "JSON Exported Successfully!\n\n\n\n\n";
     system("pause");
     menu();
@@ -449,8 +454,16 @@ void xlsxexport()
     data.close();
     system("Excel /e /a \"export.csv\" \"export.xlsx\" ");
     system("pause");
-    system("cls");
+    clearscreen();
     cout << "XLSX Exported Successfully!\n\n\n\n\n";
     system("pause");
     menu();
+}
+void clearscreen()
+{
+#ifdef WINDOWS
+    std::system("cls");
+#else
+    std::system("clear");
+#endif
 }
